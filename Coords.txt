@@ -1,0 +1,55 @@
+Timisoara:
+{
+  "startLatitude": 45.843594124138185,
+  "startLongitude": 20.98045349121094,
+  "endLatitude": 45.65457257178777,
+  "endLongitude": 21.50779724121094
+}
+
+Ciarda-Centru:
+{
+  "startLatitude": 45.77881399876913,
+  "startLongitude": 21.386690139770508,
+  "endLatitude": 45.68427345902564,
+  "endLongitude": 21.12301826477051
+}
+
+Deva-Vetel:
+{
+  "startLatitude": 45.93178767464642,
+  "startLongitude": 22.999534606933594,
+  "endLatitude": 45.83750663431215,
+  "endLongitude": 22.735862731933597
+}
+
+Chisoda-Centru:
+{
+  "startLatitude": 45.76061331085273,
+  "startLongitude": 21.377248764038086,
+  "endLatitude": 45.666041941012175,
+  "endLongitude": 21.11357688903809
+}
+
+Romania:
+{
+  "startLatitude": 48.808312201838454,
+  "startLongitude": 33.74450683593751,
+  "endLatitude": 42.7700144366239,
+  "endLongitude": 16.869506835937504
+}
+
+Bucuresti:
+{
+  "startLatitude": 44.618064155992336,
+  "startLongitude": 26.65557861328125,
+  "endLatitude": 44.2311534067498,
+  "endLongitude": 25.600891113281254
+}
+
+Deva:
+{
+  "startLatitude": 45.89656592064255,
+  "startLongitude": 22.976188659667972,
+  "endLatitude": 45.849415501541,
+  "endLongitude": 22.84435272216797
+}
