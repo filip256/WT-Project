@@ -7,10 +7,10 @@ services:
       context: .
       dockerfile: PoliceMaps/Dockerfile
 
-  mapclient:
-    image: mapclient
-    ports:
-      - "4200:80"
+  # mapclient:
+  #   image: mapclient
+  #   ports:
+  #     - "4200:80"
 
   sql:
     image: "mcr.microsoft.com/mssql/server"

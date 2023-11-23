@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using PoliceMaps.Entities;
+using System.Reflection.Emit;
 
 namespace PoliceMaps.Contexts
 {
@@ -20,12 +21,9 @@ namespace PoliceMaps.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<Filter>()
-            //    .HasMany(f => f.Keywords)
-            //    .WithOne(k => k.Filter)
-            //    .HasForeignKey(k => k.FilterId)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
+            builder.Entity<PoliceHotspot>()
+            .Property(f => f.Id)
+            .ValueGeneratedOnAdd();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
