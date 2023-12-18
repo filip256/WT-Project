@@ -12,8 +12,8 @@ using PoliceMaps.Contexts;
 namespace PoliceMaps.Migrations
 {
     [DbContext(typeof(MapsDbContext))]
-    [Migration("20231123195603_migration")]
-    partial class migration
+    [Migration("20231218132255_mig")]
+    partial class mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -29,7 +29,7 @@ namespace PoliceMaps.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=sql,1434;Initial Catalog=PM-Data;Persist Security Info=False;User ID=sa;Password=Stoaca420!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer("Server=sql,1434;Initial Catalog=PM-Data;Persist Security Info=False;User ID=sa;Password=Pass123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
             }
         }
     }
