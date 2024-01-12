@@ -77,7 +77,7 @@ namespace PoliceMaps.Controllers
         }
 
         [HttpDelete("spots/clear")]
-        public async Task<IActionResult> DeleteSpots([FromForm] DateTime beforeDate)
+        public async Task<IActionResult> DeleteSpots([FromQuery] DateTime beforeDate)
         {
             await _hotspotsRepository.DeleteAsync(s => s.LastUpdate < beforeDate);
             return Ok();
