@@ -2,7 +2,7 @@
 
 namespace PoliceMaps.Entities
 {
-    public class PoliceHotspot
+    public class Hotspot
     {
         [Key]
         public int Id { get; set; }
@@ -12,5 +12,6 @@ namespace PoliceMaps.Entities
         public int Severity { get; set; }
         public DateTime LastUpdate { get; set; }
         public DateTime FirstOcurrence { get; set; }
+        public string Type { get; set; }
     }
 }

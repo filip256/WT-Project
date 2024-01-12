@@ -8,7 +8,7 @@
 
         public static readonly int PlaceSeverityIncrement = 1;
         public static readonly TimeSpan MinPlaceReocurranceTime = TimeSpan.FromHours(3);
-        public static readonly double MaxSpatialEqualityDistance = 0.000003;
+        public static readonly double MaxSpatialEqualityDistance = 0.000006;
 
         public static readonly int WazeRefreshRateBaseMins = 10;
         public static readonly int WazeRefreshRateMaxRandomMins = 2;

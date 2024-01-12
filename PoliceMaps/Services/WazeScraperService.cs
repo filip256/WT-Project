@@ -28,9 +28,9 @@ namespace PoliceMaps.Services
                     foreach (var area in areas)
                     {
                         var _wazeCommunicator = scope.ServiceProvider.GetRequiredService<IWazeCommunicator>();
-                        var _hotspotsRepository = scope.ServiceProvider.GetRequiredService<IPoliceHotspotsRepository>();
+                        var _hotspotsRepository = scope.ServiceProvider.GetRequiredService<IHotspotsRepository>();
 
-                        var locations = await _wazeCommunicator.GetPoliceLocationsAsync(area.StartLongitude, area.StartLatitude, area.EndLongitude, area.EndLatitude);
+                        var locations = await _wazeCommunicator.GetLocationsAsync(area.StartLongitude, area.StartLatitude, area.EndLongitude, area.EndLatitude, area.SurveyTypes);
 
                         try
                         {

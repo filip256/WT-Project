@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PoliceMaps.Migrations
 {
-    public partial class mig : Migration
+    public partial class Mig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PoliceHotspots",
+                name: "Hotspots",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -20,11 +20,12 @@ namespace PoliceMaps.Migrations
                     Longitude = table.Column<double>(type: "float", nullable: false),
                     Severity = table.Column<int>(type: "int", nullable: false),
                     LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FirstOcurrence = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FirstOcurrence = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PoliceHotspots", x => x.Id);
+                    table.PrimaryKey("PK_Hotspots", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,10 +34,12 @@ namespace PoliceMaps.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartLatitude = table.Column<double>(type: "float", nullable: false),
                     StartLongitude = table.Column<double>(type: "float", nullable: false),
                     EndLatitude = table.Column<double>(type: "float", nullable: false),
-                    EndLongitude = table.Column<double>(type: "float", nullable: false)
+                    EndLongitude = table.Column<double>(type: "float", nullable: false),
+                    SurveyTypes = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +50,7 @@ namespace PoliceMaps.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PoliceHotspots");
+                name: "Hotspots");
 
             migrationBuilder.DropTable(
                 name: "SurveyAreas");
