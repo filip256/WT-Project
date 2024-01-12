@@ -21,6 +21,8 @@ namespace PoliceMaps.Repositories.Generic
 
         Task DeleteAsync(object id);
 
+        Task DeleteAsync(Expression<Func<TEntity, bool>> filter);
+
         Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             bool asNoTracking = false,
@@ -85,6 +87,12 @@ namespace PoliceMaps.Repositories.Generic
         {
             var entity = await this.GetAsync(id);
             await this.DeleteAsync(entity);
+        }
+
+        public async Task DeleteAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            _set.RemoveRange(_set.Where(filter));
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<TEntity>> GetAsync(

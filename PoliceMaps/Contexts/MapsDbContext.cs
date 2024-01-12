@@ -7,7 +7,7 @@ namespace PoliceMaps.Contexts
 {
     public class MapsDbContext : DbContext
     {
-        public DbSet<PoliceHotspot> PoliceHotspots { get; set; }
+        public DbSet<Hotspot> Hotspots { get; set; }
         public DbSet<SurveyArea> SurveyAreas { get; set; }
 
         public MapsDbContext()
@@ -21,9 +21,9 @@ namespace PoliceMaps.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<PoliceHotspot>()
-            .Property(f => f.Id)
-            .ValueGeneratedOnAdd();
+            builder.Entity<Hotspot>()
+                .Property(f => f.Id)
+                .ValueGeneratedOnAdd();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -8,13 +8,15 @@ namespace PoliceMaps.Models.DTOs
         public double Longitude { get; set; }
         public int Severity { get; set; }
         public string LastDate { get; set; }
+        public string Type { get; set; }
 
-        public HotspotExportModel(PoliceHotspot hotspot)
+        public HotspotExportModel(Hotspot hotspot)
         {
             Latitude = hotspot.Latitude;
             Longitude = hotspot.Longitude;
             Severity = hotspot.Severity;
             LastDate = (hotspot.LastUpdate + TimeSpan.FromHours(3)).ToString("dddd, dd MMMM yyyy HH:mm");
+            Type = hotspot.Type;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PoliceMaps.Cummunicators;
@@ -17,21 +18,18 @@ namespace PoliceMaps.Controllers
     [ApiController]
     public class MapsController : ControllerBase
     {
-        private readonly IPoliceHotspotsRepository _hotspotsRepository;
+        private readonly IHotspotsRepository _hotspotsRepository;
         private readonly ISurveyAreasRepository _areasRepository;
         private readonly IWazeCommunicator _wazeCommunicator;
-        private readonly IMapsCommunicator _mapsCommunicator;
 
         public MapsController(
-            IPoliceHotspotsRepository hotspotsRepository,
+            IHotspotsRepository hotspotsRepository,
             ISurveyAreasRepository areasRepository,
-            IWazeCommunicator wazeCommunicator,
-            IMapsCommunicator mapsCommunicator)
+            IWazeCommunicator wazeCommunicator)
         {
             _hotspotsRepository = hotspotsRepository;
             _areasRepository = areasRepository;
             _wazeCommunicator = wazeCommunicator;
-            _mapsCommunicator = mapsCommunicator;
         }
 
         [HttpGet("spots")]
@@ -69,6 +67,22 @@ namespace PoliceMaps.Controllers
             return Ok(response);
         }
 
+        [HttpGet("spots/inside")]
+        public async Task<IActionResult> GetHotspotsNear(
+            [FromQuery] double startLatitude, [FromQuery] double startLongitude,
+            [FromQuery] double endLatitude, [FromQuery] double endLongitude)
+        {
+            var response = await _hotspotsRepository.FindInsideAsync(startLatitude, startLongitude, endLatitude, endLongitude);
+            return Ok(response);
+        }
+
+        [HttpDelete("spots/clear")]
+        public async Task<IActionResult> DeleteSpots([FromQuery] DateTime beforeDate)
+        {
+            await _hotspotsRepository.DeleteAsync(s => s.LastUpdate < beforeDate);
+            return Ok();
+        }
+
         [HttpGet("areas")]
         public async Task<IActionResult> GetAreas([FromQuery] PaginationPropertiesModel model)
         {
@@ -81,9 +95,8 @@ namespace PoliceMaps.Controllers
         {
             await _areasRepository.AddAsync(area);
 
-            var locations = await _wazeCommunicator.GetPoliceLocationsAsync(area.StartLongitude, area.StartLatitude, area.EndLongitude, area.EndLatitude);
+            var locations = await _wazeCommunicator.GetLocationsAsync(area.StartLongitude, area.StartLatitude, area.EndLongitude, area.EndLatitude, area.SurveyTypes);
             await _hotspotsRepository.AddOrUpdateAsync(locations);
-            //await _mapsCommunicator.UploadCSVToMap("");
 
             return Ok();
         }

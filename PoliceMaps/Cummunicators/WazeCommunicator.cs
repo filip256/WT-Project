@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PoliceMaps.Cummunicators.Generic;
 using PoliceMaps.Models.DTOs;
+using PoliceMaps.Models.Enums;
 using RestSharp;
 using static PoliceMaps.Constants.Constants;
 
@@ -8,7 +9,7 @@ namespace PoliceMaps.Cummunicators
 {
     public interface IWazeCommunicator
     {
-        Task<List<PoliceLocationModel>> GetPoliceLocationsAsync(double startLongitude, double startLatitude, double endLongitude, double endLatitude);
+        Task<List<LocationModel>> GetLocationsAsync(double startLongitude, double startLatitude, double endLongitude, double endLatitude, SpotType allowedTypes);
     }
 
     public class WazeCommunicator : HttpCommunicator, IWazeCommunicator
@@ -17,7 +18,7 @@ namespace PoliceMaps.Cummunicators
             base("https://www.waze.com")
         {}
 
-        public async Task<List<PoliceLocationModel>> GetPoliceLocationsAsync(double startLongitude, double startLatitude, double endLongitude, double endLatitude)
+        public async Task<List<LocationModel>> GetLocationsAsync(double startLongitude, double startLatitude, double endLongitude, double endLatitude, SpotType allowedTypes)
         {
             var queryParams = new Dictionary<string, string>()
             {
@@ -41,31 +42,36 @@ namespace PoliceMaps.Cummunicators
             if (response == null)
             {
                 Console.WriteLine("Communicator error:\n   Waze request failed.");
-                return new List<PoliceLocationModel>();
+                return new List<LocationModel>();
             }
 
             if(response.Content == null)
             {
                 Console.WriteLine("Communicator error:\n   Waze request retured no content with status: " + response.StatusCode);
-                return new List<PoliceLocationModel>();
+                return new List<LocationModel>();
             }
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 Console.WriteLine("Communicator error:\n   Waze request returned with status: " + response.StatusCode + " and content: \"" + response.Content + "\"");
-                return new List<PoliceLocationModel>();
+                return new List<LocationModel>();
             }
 
 
             var jResponse = JObject.Parse(response.Content);
             var alerts = (JArray)jResponse["alerts"];
             if (alerts == null)
-                return new List<PoliceLocationModel>();
+                return new List<LocationModel>();
 
-            var result = new List<PoliceLocationModel>();
+            var result = new List<LocationModel>();
             foreach (var a in alerts)
             {
-                if ((string)a["type"] != "POLICE")
+                var type = (string)a["type"];
+                SpotType typeEnum;
+                if (!Enum.TryParse(type, out typeEnum))
+                    continue;
+
+                if (!allowedTypes.HasFlag(typeEnum))
                     continue;
 
                 var confidence = (int)a["confidence"] * PlaceConfidenceLevelMultiplier + (a["nThumbsUp"] != null ? (int)a["nThumbsUp"] : 0) * PlaceConfidenceLikeMultiplier;
@@ -73,14 +79,14 @@ namespace PoliceMaps.Cummunicators
                     continue;
 
                 string id = ((string)a["wazeData"]);
-                result.Add(new PoliceLocationModel
+                result.Add(new LocationModel
                 {
                     ExternalId = id.Substring(id.LastIndexOf(',') + 1),
                     Latitude = (double)a["location"]["y"],
                     Longitude = (double)a["location"]["x"],
-                    Type = (string)a["subtype"],
+                    Type = type,
                     Confidence = confidence,
-                    ArrivalTime = DateTime.Now
+                    ArrivalTime = DateTime.UtcNow
                 });
             }
 

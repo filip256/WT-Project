@@ -1,6 +1,6 @@
 ﻿namespace PoliceMaps.Models.DTOs
 {
-    public class PoliceLocationModel
+    public class LocationModel
     {
         public string ExternalId { get; set; }
         public double Latitude { get; set; }

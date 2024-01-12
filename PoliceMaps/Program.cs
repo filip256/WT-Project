@@ -17,8 +17,7 @@ namespace PoliceMaps
                 options.UseSqlServer(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")), ServiceLifetime.Transient);
 
             builder.Services.AddTransient<IWazeCommunicator, WazeCommunicator>();
-            builder.Services.AddTransient<IMapsCommunicator, MapsCommunicator>();
-            builder.Services.AddTransient<IPoliceHotspotsRepository, PoliceHotspotsRepository>();
+            builder.Services.AddTransient<IHotspotsRepository, HotspotsRepository>();
             builder.Services.AddTransient<ISurveyAreasRepository, SurveyAreasRepository>();
             builder.Services.AddHostedService<WazeScraperService>();
 

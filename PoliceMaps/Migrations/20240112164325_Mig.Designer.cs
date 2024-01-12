@@ -12,8 +12,8 @@ using PoliceMaps.Contexts;
 namespace PoliceMaps.Migrations
 {
     [DbContext(typeof(MapsDbContext))]
-    [Migration("20231218132255_mig")]
-    partial class mig
+    [Migration("20240112164325_Mig")]
+    partial class Mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace PoliceMaps.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("PoliceMaps.Entities.PoliceHotspot", b =>
+            modelBuilder.Entity("PoliceMaps.Entities.Hotspot", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,9 +51,13 @@ namespace PoliceMaps.Migrations
                     b.Property<int>("Severity")
                         .HasColumnType("int");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("PoliceHotspots");
+                    b.ToTable("Hotspots");
                 });
 
             modelBuilder.Entity("PoliceMaps.Entities.SurveyArea", b =>
@@ -70,11 +74,18 @@ namespace PoliceMaps.Migrations
                     b.Property<double>("EndLongitude")
                         .HasColumnType("float");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("StartLatitude")
                         .HasColumnType("float");
 
                     b.Property<double>("StartLongitude")
                         .HasColumnType("float");
+
+                    b.Property<int>("SurveyTypes")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
