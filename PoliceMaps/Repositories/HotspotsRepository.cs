@@ -6,6 +6,8 @@ using PoliceMaps.Helpers;
 using PoliceMaps.Repositories.Generic;
 using static PoliceMaps.Constants.Constants;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 namespace PoliceMaps.Repositories
 {
@@ -17,7 +19,7 @@ namespace PoliceMaps.Repositories
         Task<Hotspot?> FindClosestAsync(double latitude, double longitude, double? maxDistance);
         Task AddOrUpdateAsync(LocationModel model);
         Task AddOrUpdateAsync(IEnumerable<LocationModel> models);
-        Task<List<HotspotExportModel>> GetAsExportAsync(int? maxEntries);
+        Task<List<HotspotExportModel>> GetAsExportAsync(int? maxEntries, string? filter);
     }
 
     public class HotspotsRepository : GenericRepository<Hotspot, MapsDbContext>, IHotspotsRepository
@@ -106,15 +108,37 @@ namespace PoliceMaps.Repositories
                 await this.AddOrUpdateAsync(m);
         }
 
-        public async Task<List<HotspotExportModel>> GetAsExportAsync(int? maxEntries)
+        public async Task<List<HotspotExportModel>> GetAsExportAsync(int? maxEntries, string? filter)
         {
+            var query = base.GetQuery();
+
+            if (!String.IsNullOrEmpty(filter))
+            {
+                if (!filter.StartsWith('(') || !filter.EndsWith(')'))
+                {
+                    filter = '(' + filter + ')';
+                }
+
+                try
+                {
+                    var expression = (Expression<Func<Hotspot, bool>>)DynamicExpressionParser.ParseLambda(
+                        new[] { Expression.Parameter(typeof(Hotspot), "x") }, null, filter
+                    );
+                    query = query.Where(expression);
+                }
+                catch (Exception)
+                {
+                    return new List<HotspotExportModel>();
+                }
+            }
+
             if (maxEntries != null)
             {
-                return await base.GetQuery().OrderByDescending(h => h.LastUpdate)
+                return await query.OrderByDescending(h => h.LastUpdate)
                     .Take((int)maxEntries).Select(h => new HotspotExportModel(h)).ToListAsync();
             }
 
-            return await base.GetQuery().OrderByDescending(h => h.LastUpdate)
+            return await query.OrderByDescending(h => h.LastUpdate)
                 .Select(h => new HotspotExportModel(h)).ToListAsync();
         }
     }

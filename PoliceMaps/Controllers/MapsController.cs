@@ -40,9 +40,9 @@ namespace PoliceMaps.Controllers
         }
 
         [HttpGet("spots/export")]
-        public async Task<IActionResult> GetExport([FromQuery] int? maxEntries)
+        public async Task<IActionResult> GetExport([FromQuery] int? maxEntries, [FromQuery] string? filter)
         {
-            var entries = await _hotspotsRepository.GetAsExportAsync(maxEntries);
+            var entries = await _hotspotsRepository.GetAsExportAsync(maxEntries, filter);
 
             var memoryStream = new MemoryStream();
             var writer = new StreamWriter(memoryStream);
